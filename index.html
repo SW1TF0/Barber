@@ -301,6 +301,7 @@
 
         .time-slot:hover:not(.booked) { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
         .time-slot.selected { background: var(--gold); color: #000; border-color: var(--gold); }
+        .time-slot.selected span { color: #000 !important; }
         .time-slot.booked { background: var(--booked); color: #444; cursor: not-allowed; border-color: #111; }
 
         #submit-btn {
@@ -445,7 +446,6 @@
             <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800&auto=format&fit=crop" class="gallery-item" alt="Barber work 1">
             <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=800&auto=format&fit=crop" class="gallery-item" alt="Barber work 2">
             <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=800&auto=format&fit=crop" class="gallery-item" alt="Barber work 3">
-            <img src="https://images.unsplash.com/photo-1512496015851-a1dc8f78f804?q=80&w=800&auto=format&fit=crop" class="gallery-item" alt="Barber work 4">
         </div>
     </section>
 
@@ -492,7 +492,7 @@
                 <div>
                     <i class="fas fa-map-marker-alt"></i>
                     <h4>Локация</h4>
-                    <p>гр. Кърджали<br>ул. [Твоят адрес]</p>
+                    <p>ж.к. Рила<br>ул. „Екзарх Йосиф“ 17<br>6600 Кърджали</p>
                 </div>
                 <div>
                     <i class="fas fa-phone-alt"></i>
@@ -502,18 +502,19 @@
                 <div>
                     <i class="fas fa-clock"></i>
                     <h4>Работно време</h4>
-                    <p>Пон - Съб: 10:00 - 19:00<br>Неделя: Почивен ден</p>
+                    <p>Пон - Съб: 09:00 - 19:00<br>Неделя: Почивен ден</p>
                 </div>
             </div>
             <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2975.021663158098!2d25.364402615437882!3d41.642050979242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ad599fdf8e60b1%3A0x400a01269bf57d0!2sKardzhali%2C%20Bulgaria!5e0!3m2!1sen!2sbg!4v1680000000000!5m2!1sen!2sbg" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <!-- Обновена връзка към картата -->
+                <iframe src="https://maps.google.com/maps?q=ул.%20„Екзарх%20Йосиф“%2017,%206600%20Кърджали&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
 
     <footer>
         <h2 style="font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 10px;">GENTZ BARBERSHOP</h2>
-        <p style="color: #555;">© 2026 Всички права запазени.</p>
+        <p style="color: #555;">Powered by smartmenukj.com</p>
         <div class="social-links">
             <a href="https://www.instagram.com/gentz.barbershop/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
@@ -586,7 +587,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const workingHours = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+        // Часове през 30 минути от 09:00 до 18:30 (покриват работно време до 19:00)
+        const workingHours = [
+            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", 
+            "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", 
+            "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", 
+            "18:00", "18:30"
+        ];
         let selectedTime = null;
 
         const dateInput = document.getElementById('booking-date');
@@ -615,11 +622,13 @@
             const dbRef = query(ref(db, 'appointments'), orderByChild('date'), equalTo(date));
             
             onValue(dbRef, (snapshot) => {
-                const booked = [];
+                const bookedCounts = {};
                 snapshot.forEach((childSnapshot) => {
-                    booked.push(childSnapshot.val().time);
+                    const time = childSnapshot.val().time;
+                    // Броим колко пъти е запазен даден час
+                    bookedCounts[time] = (bookedCounts[time] || 0) + 1;
                 });
-                renderGrid(booked, date);
+                renderGrid(bookedCounts, date);
             }, (error) => {
                 console.error("Firebase грешка:", error);
                 timeGrid.innerHTML = '<p style="color: #ff4444; grid-column: 1 / -1;"><i class="fas fa-exclamation-triangle"></i> Връзката е отказана. Моля, проверете Rules във Firebase!</p>';
@@ -627,26 +636,35 @@
             });
         }
 
-        function renderGrid(booked, selectedDate) {
+        function renderGrid(bookedCounts, selectedDate) {
             timeGrid.innerHTML = '';
             selectedTime = null;
             submitBtn.disabled = true;
 
-            const currentHour = new Date().getHours();
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMin = now.getMinutes();
             const isToday = (selectedDate === localDateString);
 
             workingHours.forEach(time => {
-                const timeHour = parseInt(time.split(':')[0]);
-                const isPastTime = isToday && (timeHour <= currentHour);
+                const [timeHour, timeMin] = time.split(':').map(Number);
+                
+                // Проверка дали часът вече е минал (отчита и минутите)
+                const isPastTime = isToday && (timeHour < currentHour || (timeHour === currentHour && timeMin <= currentMin));
 
                 const div = document.createElement('div');
                 div.className = 'time-slot';
-                div.innerText = time;
+                
+                const count = bookedCounts[time] || 0;
+                // Максимум 3 резервации за един час (за 3-те стола)
+                const isFullyBooked = count >= 3;
 
-                if (booked.includes(time) || isPastTime) {
+                if (isFullyBooked || isPastTime) {
                     div.classList.add('booked');
-                    div.innerHTML = `${time}<br><span style="font-size:0.75rem; color:#666;">${isPastTime && !booked.includes(time) ? 'Минал' : 'Зает'}</span>`;
+                    div.innerHTML = `${time}<br><span style="font-size:0.75rem; color:#666;">${isPastTime && !isFullyBooked ? 'Минал' : 'Зает'}</span>`;
                 } else {
+                    const freeSpots = 3 - count;
+                    div.innerHTML = `${time}<br><span style="font-size:0.75rem; color:var(--gold);">Свободни: ${freeSpots}</span>`;
                     div.onclick = () => {
                         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
                         div.classList.add('selected');
@@ -672,6 +690,10 @@
             const phone = document.getElementById('client-phone').value;
             const date = dateInput.value;
 
+            // Форматираме датата от yyyy-mm-dd към dd/mm/yyyy
+            const [year, month, day] = date.split('-');
+            const formattedDate = `${day}/${month}/${year}`;
+
             submitBtn.disabled = true;
             submitBtn.innerText = "ОБРАБОТКА...";
 
@@ -684,14 +706,15 @@
                 const savePromise = set(newApptRef, {
                     clientName: name,
                     clientPhone: phone,
-                    date: date,
+                    date: date, // Пазим го в базата като yyyy-mm-dd за по-лесно сортиране
                     time: selectedTime,
                     timestamp: Date.now()
                 });
 
                 await Promise.race([savePromise, timeoutPromise]);
                 
-                showToast(`Успешно запазихте час за ${date} в ${selectedTime} ч.`, 'success');
+                // Показваме форматираната дата в съобщението
+                showToast(`Успешно запазихте час за ${formattedDate} в ${selectedTime} ч.`, 'success');
                 
                 document.getElementById('booking-form').reset();
                 timeGrid.innerHTML = '<p style="color: #666; font-size: 0.9rem; grid-column: 1 / -1;"><i class="fas fa-calendar-alt"></i> Моля, първо изберете дата.</p>';
