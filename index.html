@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gentz Barbershop | Премиум бръснарски услуги в Кърджали</title>
+    <title>Gentlemen's Barbershop | Премиум бръснарски услуги в Кърджали</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -188,17 +188,20 @@
         /* --- Услуги --- */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
         .service-card {
             background: var(--gray);
-            padding: 50px 30px;
+            padding: 40px 25px;
             border: 1px solid var(--light-gray);
             transition: 0.4s;
             position: relative;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .service-card:hover {
@@ -210,13 +213,25 @@
 
         .service-card h3 {
             font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
             color: var(--text);
+            text-transform: uppercase;
         }
 
-        .service-card p { color: #aaa; font-size: 0.95rem; margin-bottom: 25px; }
-        .price { font-size: 1.6rem; color: var(--gold); font-weight: bold; font-family: 'Cinzel', serif; }
+        .service-card p { color: #888; font-size: 0.85rem; margin-bottom: 20px; min-height: 40px;}
+
+        .price-wrapper {
+            border-top: 1px solid #222;
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .price-eu { font-size: 1.8rem; color: var(--gold); font-weight: bold; font-family: 'Cinzel', serif; }
+        .price-lv { font-size: 1rem; color: #666; font-weight: 400; }
 
         /* --- Галерия --- */
         .gallery-grid {
@@ -281,6 +296,75 @@
 
         input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
 
+        /* --- Custom Multiselect Dropdown --- */
+        .multiselect-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .select-box {
+            width: 100%;
+            padding: 16px;
+            background: var(--dark);
+            border: 1px solid #333;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .select-box:after {
+            content: "\f107";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--gold);
+            transition: 0.3s;
+        }
+
+        .multiselect-container.active .select-box:after { transform: rotate(180deg); }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            z-index: 10;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .multiselect-container.active .dropdown-content { display: block; }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .dropdown-item:hover { background: #1a1a1a; }
+        .dropdown-item input { width: auto; cursor: pointer; accent-color: var(--gold); }
+        .dropdown-item span { font-size: 0.9rem; color: #ccc; pointer-events: none; }
+
+        .total-price-tag {
+            text-align: right;
+            margin-bottom: 25px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .total-price-tag span { color: var(--gold); font-weight: bold; font-family: 'Cinzel', serif; font-size: 1.1rem; }
+
+        /* Time Grid */
         .time-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -301,7 +385,6 @@
 
         .time-slot:hover:not(.booked) { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
         .time-slot.selected { background: var(--gold); color: #000; border-color: var(--gold); }
-        .time-slot.selected span { color: #000 !important; }
         .time-slot.booked { background: var(--booked); color: #444; cursor: not-allowed; border-color: #111; }
 
         #submit-btn {
@@ -355,7 +438,7 @@
         }
         .social-links a:hover { background: var(--gold); color: #000; }
 
-        /* --- Toast Notifications --- */
+        /* Toast */
         #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast {
             min-width: 300px; padding: 20px; background: var(--gray); border-left: 5px solid var(--gold);
@@ -367,10 +450,6 @@
         .toast.success { border-left-color: #4CAF50; }
         .toast.error { border-left-color: #F44336; }
 
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Mobile Responsive */
         @media (max-width: 900px) {
             nav { padding: 20px; }
             .menu-toggle { display: block; }
@@ -380,7 +459,7 @@
                 clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease-in-out;
             }
             .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-            .form-row, .contact-container { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
             .booking-wrapper { padding: 30px; }
         }
     </style>
@@ -388,7 +467,7 @@
 <body>
 
     <nav id="navbar">
-        <a href="#" class="nav-logo">GENTZ</a>
+        <a href="#" class="nav-logo">GENTLEMEN'S</a>
         <i class="fas fa-bars menu-toggle" id="mobile-menu-btn"></i>
         <ul class="nav-links" id="nav-links">
             <li><a href="#about">За нас</a></li>
@@ -400,7 +479,7 @@
     </nav>
 
     <header class="hero">
-        <h1>GENTZ</h1>
+        <h1>GENTLEMEN'S</h1>
         <p>Клубът на джентълмените в Кърджали</p>
         <a href="#booking" class="cta-btn">Запази своя час</a>
     </header>
@@ -409,31 +488,79 @@
         <h2 class="section-title">Нашата <span>Философия</span></h2>
         <p class="section-subtitle">Повече от прическа - изживяване</p>
         <div style="text-align: center; max-width: 800px; margin: 0 auto; color: #ccc; font-size: 1.1rem; line-height: 1.8;">
-            <p>Вярваме, че мъжката поддръжка е ритуал, който изисква време, прецизност и правилното отношение. В Gentz Barbershop съчетаваме класическите бръснарски традиции с модерните тенденции, за да ти предложим стил, който говори вместо теб.</p>
+            <p>Вярваме, че мъжката поддръжка е ритуал, който изисква време, прецизност и правилното отношение. В Gentlemen's Barbershop съчетаваме класическите бръснарски традиции с модерните тенденции, за да ти предложим стил, който говори вместо теб.</p>
         </div>
     </section>
 
     <section id="services" class="reveal">
-        <h2 class="section-title">Премиум <span>Услуги</span></h2>
+        <h2 class="section-title">Ценоразпис <span>Услуги</span></h2>
         <p class="section-subtitle">Безкомпромисно качество</p>
         
         <div class="services-grid">
             <div class="service-card">
-                <h3>Мъжко подстригване</h3>
-                <p>Консултация, измиване, прецизно машинно и ножично подстригване, стилизиране с висок клас козметика.</p>
-                <div class="price">25.00 лв</div>
+                <div>
+                    <h3>Подстригване</h3>
+                    <p>Включва и измиване на косата за пълен комфорт и освежаване.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu">10 €</span>
+                    <span class="price-lv">19.56 лв.</span>
+                </div>
             </div>
             
             <div class="service-card">
-                <h3>Оформяне на брада</h3>
-                <p>Контуриране, подрязване на дължината, нанасяне на подхранващи масла и балсам за безупречен вид.</p>
-                <div class="price">15.00 лв</div>
+                <div>
+                    <h3>Оформяне на брада</h3>
+                    <p>Професионално контуриране и оформяне на лицевото окосмяване.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu">4 €</span>
+                    <span class="price-lv">7.82 лв.</span>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div>
+                    <h3>Оформяне на вежди</h3>
+                    <p>Прецизно почистване за по-подчертан и поддържан вид.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu">3 €</span>
+                    <span class="price-lv">6.00 лв.</span>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div>
+                    <h3>Маска за лице</h3>
+                    <p>Дълбоко почистване и хидратация на кожата след бръснене.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu">2.50 €</span>
+                    <span class="price-lv">5.00 лв.</span>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div>
+                    <h3>Пенсионери</h3>
+                    <p>Специална преференциална цена за нашите почетни клиенти.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu">7.50 €</span>
+                    <span class="price-lv">15.00 лв.</span>
+                </div>
             </div>
 
             <div class="service-card" style="border-color: var(--gold);">
-                <h3>Gentz Combo <i class="fas fa-star" style="font-size: 1rem; color: var(--gold)"></i></h3>
-                <p>Пълният пакет за перфектна визия. Включва подстригване и оформяне на брада с гореща кърпа.</p>
-                <div class="price">35.00 лв</div>
+                <div>
+                    <h3>Джентълмен Сет <i class="fas fa-crown" style="font-size: 0.9rem; color: var(--gold)"></i></h3>
+                    <p>Пълен пакет: Подстригване, измиване, брада, вежди и маска за лице.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-eu" style="font-size: 2rem;">18 €</span>
+                    <span class="price-lv">35.20 лв.</span>
+                </div>
             </div>
         </div>
     </section>
@@ -451,7 +578,7 @@
 
     <section id="booking" class="reveal">
         <h2 class="section-title">Запази <span>Час</span></h2>
-        <p class="section-subtitle">Избери удобен за теб момент</p>
+        <p class="section-subtitle">Избери своите услуги и време</p>
 
         <div class="booking-wrapper">
             <form id="booking-form">
@@ -464,6 +591,41 @@
                         <label for="client-phone">Телефонен номер</label>
                         <input type="tel" id="client-phone" placeholder="08XX XXX XXX" required>
                     </div>
+                </div>
+
+                <label>Изберете услуги</label>
+                <div class="multiselect-container" id="multiselect">
+                    <div class="select-box" id="select-box">Изберете услуги...</div>
+                    <div class="dropdown-content">
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Подстригване" data-price="10">
+                            <span>Подстригване (10 €)</span>
+                        </label>
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Оформяне на брада" data-price="4">
+                            <span>Оформяне на брада (4 €)</span>
+                        </label>
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Оформяне на вежди" data-price="3">
+                            <span>Оформяне на вежди (3 €)</span>
+                        </label>
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Маска за лице" data-price="2.5">
+                            <span>Маска за лице (2.50 €)</span>
+                        </label>
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Пенсионери" data-price="7.5">
+                            <span>Пенсионери (7.50 €)</span>
+                        </label>
+                        <label class="dropdown-item">
+                            <input type="checkbox" value="Джентълмен Сет" data-price="18">
+                            <span>Джентълмен Сет (18 €)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="total-price-tag">
+                    Обща сума: <span id="total-price">0.00 €</span>
                 </div>
 
                 <div class="form-row" style="grid-template-columns: 1fr;">
@@ -506,14 +668,13 @@
                 </div>
             </div>
             <div class="map">
-                <!-- Обновена връзка към картата -->
-                <iframe src="https://maps.google.com/maps?q=ул.%20„Екзарх%20Йосиф“%2017,%206600%20Кърджали&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2983.348618768565!2d25.3712866!3d41.6420556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ad66e9275e7a9b%3A0x6b4737d6e4663e26!2sUl.%20%22Ekzarh%20Iosif%22%2017%2C%206600%20Kardzhali!5e0!3m2!1sen!2sbg!4v1711995000000!5m2!1sen!2sbg" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
 
     <footer>
-        <h2 style="font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 10px;">GENTZ BARBERSHOP</h2>
+        <h2 style="font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 10px;">GENTLEMEN'S BARBERSHOP</h2>
         <p style="color: #555;">Powered by smartmenukj.com</p>
         <div class="social-links">
             <a href="https://www.instagram.com/gentz.barbershop/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -523,6 +684,7 @@
     <div id="toast-container"></div>
 
     <script>
+        // --- UI Animation & Dropdown Logic ---
         window.addEventListener('scroll', () => {
             document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
         });
@@ -534,34 +696,47 @@
             menuBtn.classList.toggle('fa-bars');
             menuBtn.classList.toggle('fa-times');
         });
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuBtn.classList.replace('fa-times', 'fa-bars');
-            });
-        });
 
         const reveals = document.querySelectorAll('.reveal');
-        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
-        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target);
+        const revealOnScroll = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.15 });
+        reveals.forEach(r => revealOnScroll.observe(r));
+
+        // Custom Dropdown Logic
+        const multiselect = document.getElementById('multiselect');
+        const selectBox = document.getElementById('select-box');
+        const checkboxes = multiselect.querySelectorAll('input[type="checkbox"]');
+        const totalPriceEl = document.getElementById('total-price');
+
+        selectBox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            multiselect.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!multiselect.contains(e.target)) multiselect.classList.remove('active');
+        });
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const selected = Array.from(checkboxes).filter(i => i.checked).map(i => i.value);
+                selectBox.innerText = selected.length > 0 ? selected.join(', ') : 'Изберете услуги...';
+                
+                let total = 0;
+                checkboxes.forEach(i => { if(i.checked) total += parseFloat(i.dataset.price); });
+                totalPriceEl.innerText = total.toFixed(2) + " €";
             });
-        }, revealOptions);
-        reveals.forEach(reveal => revealOnScroll.observe(reveal));
+        });
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            const icon = type === 'success' ? '<i class="fas fa-check-circle" style="color:#4CAF50; font-size:1.5rem;"></i>' : '<i class="fas fa-exclamation-circle" style="color:#F44336; font-size:1.5rem;"></i>';
+            const icon = type === 'success' ? '<i class="fas fa-check-circle" style="color:#4CAF50;"></i>' : '<i class="fas fa-exclamation-circle" style="color:#F44336;"></i>';
             toast.innerHTML = `${icon} <span>${message}</span>`;
-            
             container.appendChild(toast);
             setTimeout(() => toast.classList.add('show'), 10);
-            
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 400);
@@ -587,13 +762,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Часове през 30 минути от 09:00 до 18:30 (покриват работно време до 19:00)
-        const workingHours = [
-            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", 
-            "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", 
-            "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", 
-            "18:00", "18:30"
-        ];
+        const workingHours = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
         let selectedTime = null;
 
         const dateInput = document.getElementById('booking-date');
@@ -606,10 +775,8 @@
 
         dateInput.addEventListener('change', (e) => {
             const date = e.target.value;
-            const selectedDay = new Date(date).getDay();
-            
-            if(selectedDay === 0) {
-                timeGrid.innerHTML = '<p style="color: #ff4444; grid-column: 1 / -1;"><i class="fas fa-ban"></i> В Неделя почиваме. Моля изберете друг ден.</p>';
+            if(new Date(date).getDay() === 0) {
+                timeGrid.innerHTML = '<p style="color: #ff4444; grid-column: 1 / -1;">В Неделя почиваме.</p>';
                 submitBtn.disabled = true;
                 return;
             }
@@ -617,22 +784,15 @@
         });
 
         function loadSlots(date) {
-            timeGrid.innerHTML = '<p style="color: #aaa; grid-column: 1 / -1;"><i class="fas fa-spinner fa-spin"></i> Проверка на графика...</p>';
-            
+            timeGrid.innerHTML = '<p style="color: #aaa; grid-column: 1 / -1;">Проверка...</p>';
             const dbRef = query(ref(db, 'appointments'), orderByChild('date'), equalTo(date));
-            
             onValue(dbRef, (snapshot) => {
                 const bookedCounts = {};
-                snapshot.forEach((childSnapshot) => {
-                    const time = childSnapshot.val().time;
-                    // Броим колко пъти е запазен даден час
-                    bookedCounts[time] = (bookedCounts[time] || 0) + 1;
+                snapshot.forEach(child => {
+                    const t = child.val().time;
+                    bookedCounts[t] = (bookedCounts[t] || 0) + 1;
                 });
                 renderGrid(bookedCounts, date);
-            }, (error) => {
-                console.error("Firebase грешка:", error);
-                timeGrid.innerHTML = '<p style="color: #ff4444; grid-column: 1 / -1;"><i class="fas fa-exclamation-triangle"></i> Връзката е отказана. Моля, проверете Rules във Firebase!</p>';
-                submitBtn.disabled = true;
             });
         }
 
@@ -640,31 +800,21 @@
             timeGrid.innerHTML = '';
             selectedTime = null;
             submitBtn.disabled = true;
-
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMin = now.getMinutes();
             const isToday = (selectedDate === localDateString);
+            const now = new Date();
 
             workingHours.forEach(time => {
-                const [timeHour, timeMin] = time.split(':').map(Number);
-                
-                // Проверка дали часът вече е минал (отчита и минутите)
-                const isPastTime = isToday && (timeHour < currentHour || (timeHour === currentHour && timeMin <= currentMin));
+                const [h, m] = time.split(':').map(Number);
+                const isPast = isToday && (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
+                const count = bookedCounts[time] || 0;
 
                 const div = document.createElement('div');
                 div.className = 'time-slot';
-                
-                const count = bookedCounts[time] || 0;
-                // Максимум 3 резервации за един час (за 3-те стола)
-                const isFullyBooked = count >= 3;
-
-                if (isFullyBooked || isPastTime) {
+                if (count >= 3 || isPast) {
                     div.classList.add('booked');
-                    div.innerHTML = `${time}<br><span style="font-size:0.75rem; color:#666;">${isPastTime && !isFullyBooked ? 'Минал' : 'Зает'}</span>`;
+                    div.innerHTML = `${time}<br><small>Зает</small>`;
                 } else {
-                    const freeSpots = 3 - count;
-                    div.innerHTML = `${time}<br><span style="font-size:0.75rem; color:var(--gold);">Свободни: ${freeSpots}</span>`;
+                    div.innerHTML = `${time}<br><small>Свободни: ${3-count}</small>`;
                     div.onclick = () => {
                         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
                         div.classList.add('selected');
@@ -678,53 +828,36 @@
 
         document.getElementById('booking-form').onsubmit = async (e) => {
             e.preventDefault();
+            const selectedServices = Array.from(document.querySelectorAll('.dropdown-item input:checked')).map(cb => cb.value);
             
-            if (!selectedTime) {
-                showToast("Моля, първо изберете свободен час от списъка!", "error");
-                submitBtn.innerText = "ПОТВЪРДИ РЕЗЕРВАЦИЯТА";
-                submitBtn.disabled = false;
-                return;
-            }
-
-            const name = document.getElementById('client-name').value;
-            const phone = document.getElementById('client-phone').value;
-            const date = dateInput.value;
-
-            // Форматираме датата от yyyy-mm-dd към dd/mm/yyyy
-            const [year, month, day] = date.split('-');
-            const formattedDate = `${day}/${month}/${year}`;
+            if (selectedServices.length === 0) { showToast("Изберете услуга!", "error"); return; }
+            if (!selectedTime) { showToast("Изберете час!", "error"); return; }
 
             submitBtn.disabled = true;
             submitBtn.innerText = "ОБРАБОТКА...";
 
-            const timeoutPromise = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Връзката с Firebase изтече.')), 10000)
-            );
-
             try {
                 const newApptRef = push(ref(db, 'appointments'));
-                const savePromise = set(newApptRef, {
-                    clientName: name,
-                    clientPhone: phone,
-                    date: date, // Пазим го в базата като yyyy-mm-dd за по-лесно сортиране
+                await set(newApptRef, {
+                    clientName: document.getElementById('client-name').value,
+                    clientPhone: document.getElementById('client-phone').value,
+                    services: selectedServices.join(', '),
+                    totalPrice: document.getElementById('total-price').innerText,
+                    date: dateInput.value,
                     time: selectedTime,
                     timestamp: Date.now()
                 });
 
-                await Promise.race([savePromise, timeoutPromise]);
-                
-                // Показваме форматираната дата в съобщението
-                showToast(`Успешно запазихте час за ${formattedDate} в ${selectedTime} ч.`, 'success');
-                
+                showToast(`Запазен час за ${selectedTime}!`, 'success');
                 document.getElementById('booking-form').reset();
-                timeGrid.innerHTML = '<p style="color: #666; font-size: 0.9rem; grid-column: 1 / -1;"><i class="fas fa-calendar-alt"></i> Моля, първо изберете дата.</p>';
-                submitBtn.innerText = "ПОТВЪРДИ РЕЗЕРВАЦИЯТА";
+                document.getElementById('select-box').innerText = 'Изберете услуги...';
+                document.getElementById('total-price').innerText = "0.00 €";
+                timeGrid.innerHTML = '<p style="color: #666; grid-column: 1 / -1;">Изберете дата.</p>';
             } catch (err) {
-                showToast('Грешка! Проверете връзката си или базата данни.', 'error');
+                showToast('Грешка!', 'error');
                 submitBtn.disabled = false;
-                submitBtn.innerText = "ПОТВЪРДИ РЕЗЕРВАЦИЯТА";
-                console.error(err);
             }
+            submitBtn.innerText = "ПОТВЪРДИ РЕЗЕРВАЦИЯТА";
         };
     </script>
 </body>
