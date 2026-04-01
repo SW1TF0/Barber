@@ -221,6 +221,8 @@
                             <th>Час</th>
                             <th>Клиент</th>
                             <th>Телефон</th>
+                            <th>Услуги</th>
+                            <th>Цена</th>
                             <th style="text-align: right;">Управление</th>
                         </tr>
                     </thead>
@@ -384,6 +386,8 @@
                         <td data-label="Телефон" class="client-phone">
                             <a href="tel:${app.clientPhone}"><i class="fas fa-phone-alt"></i> ${app.clientPhone}</a>
                         </td>
+                        <td data-label="Услуги" style="font-size: 0.85rem; color: var(--text-muted); max-width: 200px;">${app.services || '-'}</td>
+                        <td data-label="Цена" style="font-weight: 600; color: var(--gold);">${app.totalPrice || '-'}</td>
                         <td data-label="Управление" style="text-align: right;">
                             <button class="action-btn" onclick="openDeleteModal('${app.id}', '${app.time}', '${app.clientName}')">
                                 <i class="fas fa-times"></i> Отмяна
