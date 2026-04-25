@@ -152,7 +152,7 @@
             box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
         }
 
-        /* --- Общи стилове за секции --- */
+        /* --- Секции --- */
         section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
         
         .section-title {
@@ -249,17 +249,6 @@
             transform: scale(1.02);
         }
 
-        /* --- Animations --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* КРАЙ НА ПЪРВА ЧАСТ СТИЛОВЕ - Втората част продължава със специфичните форми и JS */
         /* --- Резервация --- */
         .booking-wrapper {
             background: var(--gray);
@@ -287,7 +276,7 @@
             letter-spacing: 1px;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 14px;
             background: var(--dark);
@@ -298,7 +287,7 @@
             transition: 0.3s;
         }
 
-        input:focus { border-color: var(--gold); outline: none; }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
 
         /* --- Custom Multiselect --- */
         .multiselect-container { position: relative; width: 100%; margin-bottom: 15px; }
@@ -358,16 +347,8 @@
 
         .map iframe { width: 100%; height: 100%; min-height: 300px; border: none; filter: invert(90%) contrast(80%); }
 
-        /* Footer */
         footer { text-align: center; padding: 40px 20px; background: #020202; border-top: 1px solid #111; }
-        .social-links { margin-top: 20px; }
-        .social-links a { 
-            display: inline-flex; width: 40px; height: 40px; border-radius: 50%; 
-            border: 1px solid var(--gold); color: var(--gold); justify-content: center; 
-            align-items: center; margin: 0 8px; text-decoration: none; 
-        }
 
-        /* Toast */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 10000; }
         .toast {
             min-width: 250px; padding: 15px; background: var(--gray); border-left: 5px solid var(--gold);
@@ -375,7 +356,6 @@
         }
         .toast.show { transform: translateX(0); }
 
-        /* --- Media Queries (Mobile Fixes) --- */
         @media (max-width: 900px) {
             nav { padding: 15px 20px; }
             .menu-toggle { display: block; }
@@ -387,7 +367,6 @@
             .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
             .form-row { grid-template-columns: 1fr; }
             .contact-container { grid-template-columns: 1fr; }
-            .hero h1 { letter-spacing: 5px; }
         }
     </style>
 </head>
@@ -467,6 +446,23 @@
                     <div><label for="client-name">Име</label><input type="text" id="client-name" required></div>
                     <div><label for="client-phone">Телефон</label><input type="tel" id="client-phone" required></div>
                 </div>
+                
+                <div class="form-row">
+                    <div>
+                        <label for="barber-select">Избери Бръснар</label>
+                        <select id="barber-select" required>
+                            <option value="" disabled selected>Избери майстор...</option>
+                            <option value="Али">Али</option>
+                            <option value="Исмата">Исмата</option>
+                            <option value="Трети">Трети</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Дата</label>
+                        <input type="date" id="booking-date" required>
+                    </div>
+                </div>
+
                 <label>Услуги</label>
                 <div class="multiselect-container" id="multiselect">
                     <div class="select-box" id="select-box">Изберете услуги...</div>
@@ -480,12 +476,11 @@
                     </div>
                 </div>
                 <div class="total-price-tag">Общо: <span id="total-price">0.00 €</span></div>
-                <div class="form-row" style="grid-template-columns: 1fr;">
-                    <div><label>Дата</label><input type="date" id="booking-date" required></div>
-                </div>
+
                 <label>Свободен час</label>
-                <div id="time-grid" class="time-grid"><p style="color: #666; font-size: 0.8rem;">Изберете дата.</p></div>
-                <button type="submit" id="submit-btn" disabled>ПОТВЪРДИ</button>
+                <div id="time-grid" class="time-grid"><p style="color: #666; font-size: 0.8rem;">Избери бръснар и дата.</p></div>
+                
+                <button type="submit" id="submit-btn" disabled>ПОТВЪРДИ РЕЗЕРВАЦИЯТА</button>
             </form>
         </div>
     </section>
@@ -496,9 +491,13 @@
             <div class="contact-info">
                 <div><i class="fas fa-map-marker-alt"></i><h4>Локация</h4><p>ул. „Екзарх Йосиф“ 17, Кърджали</p></div>
                 <div><i class="fas fa-phone-alt"></i><h4>Телефон</h4><p>+359 888 123 456</p></div>
-                <div><i class="fas fa-clock"></i><h4>Време</h4><p>Пон - Съб: 09:00 - 19:00</p></div>
+                <div><i class="fas fa-clock"></i><h4>Време</h4>
+                    <p>Пон - Пет: 09:00 - 19:00</p>
+                    <p>Събота: 09:00 - 17:00</p>
+                    <p>Неделя: 10:00 - 15:00</p>
+                </div>
             </div>
-            <div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2983.567!2d25.368!3d41.642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDM4JzMxLjIiTiAyNcKwMjInMDQuOCJF!5e0!3m2!1sen!2sbg!4v1620000000000"></iframe></div>
+            <div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2983.473539958348!2d25.3695!3d41.6425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDM4JzMzLjAiTiAyNcKwMjInMTAuMiJF!5e0!3m2!1sbg!2sbg!4v1620000000000"></iframe></div>
         </div>
     </section>
 
@@ -558,49 +557,102 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const workingHours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+        
         let selectedTime = null;
 
+        const barberSelect = document.getElementById('barber-select');
         const dateInput = document.getElementById('booking-date');
         const timeGrid = document.getElementById('time-grid');
         const submitBtn = document.getElementById('submit-btn');
 
         dateInput.min = new Date().toISOString().split('T')[0];
-        dateInput.addEventListener('change', (e) => { loadSlots(e.target.value); });
 
-        function loadSlots(date) {
-            const dbRef = query(ref(db, 'appointments'), orderByChild('date'), equalTo(date));
+        // Слушатели за промяна на дата или бръснар
+        [dateInput, barberSelect].forEach(el => {
+            el.addEventListener('change', () => {
+                if (dateInput.value && barberSelect.value) {
+                    loadSlots(dateInput.value, barberSelect.value);
+                }
+            });
+        });
+
+        function loadSlots(dateString, barberName) {
+            const dateObj = new Date(dateString);
+            const dayOfWeek = dateObj.getDay(); 
+            
+            let currentWorkingHours = [];
+
+            // Дефиниране на часове спрямо деня
+            if (dayOfWeek === 0) { // НЕДЕЛЯ
+                currentWorkingHours = ["10:00", "11:00", "12:00", "13:00", "14:00"];
+            } else if (dayOfWeek === 6) { // СЪБОТА
+                currentWorkingHours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
+            } else { // ПОНЕДЕЛНИК - ПЕТЪК
+                currentWorkingHours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+            }
+
+            // Заявка към Firebase филтрирана по дата
+            const dbRef = query(ref(db, 'appointments'), orderByChild('date'), equalTo(dateString));
+            
             onValue(dbRef, (snapshot) => {
-                const booked = {}; snapshot.forEach(child => { booked[child.val().time] = true; });
+                const booked = {}; 
+                snapshot.forEach(child => { 
+                    const data = child.val();
+                    // Важно: Проверяваме дали часът е зает конкретно за избрания бръснар
+                    if (data.barber === barberName) {
+                        booked[data.time] = true; 
+                    }
+                });
+
                 timeGrid.innerHTML = '';
-                workingHours.forEach(time => {
+                selectedTime = null;
+                submitBtn.disabled = true;
+
+                currentWorkingHours.forEach(time => {
                     const div = document.createElement('div');
                     div.className = 'time-slot' + (booked[time] ? ' booked' : '');
                     div.innerText = time;
-                    if (!booked[time]) div.onclick = () => { 
-                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                        div.classList.add('selected'); selectedTime = time; submitBtn.disabled = false;
-                    };
+                    
+                    if (!booked[time]) {
+                        div.onclick = () => { 
+                            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                            div.classList.add('selected'); 
+                            selectedTime = time; 
+                            submitBtn.disabled = false;
+                        };
+                    }
                     timeGrid.appendChild(div);
                 });
+
+                if (currentWorkingHours.length === 0) {
+                    timeGrid.innerHTML = '<p style="color: #666; font-size: 0.8rem;">Днес е почивен ден.</p>';
+                }
             });
         }
 
         document.getElementById('booking-form').onsubmit = async (e) => {
             e.preventDefault();
+            if(!selectedTime || !barberSelect.value) return;
+            
             submitBtn.disabled = true;
             try {
                 const newRef = push(ref(db, 'appointments'));
                 await set(newRef, {
                     clientName: document.getElementById('client-name').value,
                     clientPhone: document.getElementById('client-phone').value,
+                    barber: barberSelect.value, // ЗАПАЗВАМЕ ИЗБРАНИЯ БРЪСНАР
                     date: dateInput.value,
                     time: selectedTime,
-                    totalPrice: totalPriceEl.innerText
+                    totalPrice: document.getElementById('total-price').innerText,
+                    timestamp: Date.now()
                 });
-                showToast("Успешно!");
-                location.reload();
-            } catch (err) { showToast("Грешка!", "error"); submitBtn.disabled = false; }
+                
+                showToast("Успешна резервация при " + barberSelect.value + "!");
+                setTimeout(() => location.reload(), 2500);
+            } catch (err) { 
+                showToast("Грешка при записването!", "error"); 
+                submitBtn.disabled = false; 
+            }
         };
     </script>
 </body>
