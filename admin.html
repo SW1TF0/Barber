@@ -28,7 +28,7 @@
             background-color: var(--bg-main);
             color: var(--text-main);
             height: 100vh;
-            height: 100dvh; /* По-добро за мобилни браузъри */
+            height: 100dvh;
             overflow: hidden; 
             display: flex;
         }
@@ -52,7 +52,7 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%; max-width: 420px;
             backdrop-filter: blur(20px);
-            margin: 0 15px; /* За много малки екрани */
+            margin: 0 15px;
         }
 
         .login-box h1 { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 10px; font-size: 2.2rem; }
@@ -104,8 +104,8 @@
         .stat-info h3 { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; margin-bottom: 5px; }
         .stat-info p { font-size: 1.8rem; font-weight: 600; color: var(--text-main); }
 
-        .table-container { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
+        .table-container { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; }
         th { background: rgba(0,0,0,0.2); color: var(--text-muted); padding: 20px 25px; font-size: 0.85rem; text-transform: uppercase; font-weight: 600; border-bottom: 1px solid var(--border); }
         td { padding: 20px 25px; border-bottom: 1px solid var(--border); vertical-align: middle; transition: background 0.2s; }
         tr:last-child td { border-bottom: none; }
@@ -116,6 +116,8 @@
         .client-name i { color: var(--text-muted); font-size: 0.9rem; }
         .client-phone a { color: var(--text-muted); text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
         .client-phone a:hover { color: var(--gold); }
+        
+        .barber-badge { background: #27272a; color: #e4e4e7; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
 
         .action-btn { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
         .action-btn:hover { background: rgba(255, 77, 79, 0.1); color: var(--danger); border-color: rgba(255, 77, 79, 0.3); }
@@ -125,19 +127,14 @@
         .loader { text-align: center; padding: 80px; color: var(--gold); display: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 99999; padding: 15px; }
-        .modal-box { background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .modal-box { background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .modal-box .icon { width: 60px; height: 60px; background: rgba(255, 77, 79, 0.1); color: var(--danger); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; margin: 0 auto 20px; }
         .modal-box h3 { font-size: 1.3rem; margin-bottom: 10px; }
         .modal-box p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.5; }
         .modal-actions { display: flex; gap: 15px; justify-content: center; }
-        .btn-cancel { flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: white; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .btn-cancel:hover { background: var(--bg-hover); }
-        .btn-confirm { flex: 1; padding: 12px; background: var(--danger); border: none; color: white; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; }
-        .btn-confirm:hover { background: var(--danger-hover); }
+        .btn-cancel { flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border); color: white; border-radius: 8px; cursor: pointer; }
+        .btn-confirm { flex: 1; padding: 12px; background: var(--danger); border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* --- РЕСПОНСИВ ДИЗАЙН (МОБИЛНИ УСТРОЙСТВА) --- */
         @media (max-width: 1024px) {
             #dashboard-wrapper { flex-direction: column; }
             aside { width: 100%; padding: 15px 20px; flex-direction: row; align-items: center; justify-content: space-between; border-right: none; border-bottom: 1px solid var(--border); }
@@ -146,49 +143,18 @@
             .logout-btn { width: auto; padding: 10px 20px; }
             main { padding: 25px 15px; }
             header { flex-direction: column; align-items: stretch; gap: 20px; }
-            .date-picker-wrap { width: 100%; }
-            .date-picker-wrap input { width: 100%; text-align: center; }
         }
 
         @media (max-width: 768px) {
-            .page-title h2 { font-size: 1.6rem; }
-            .login-box { padding: 40px 25px; }
-            
-            /* Превръщане на таблицата в карти за мобилни екрани */
+            table { min-width: unset; }
             table, thead, tbody, th, td, tr { display: block; }
             th { display: none; }
             tr { margin-bottom: 20px; border: 1px solid var(--border); border-radius: 12px; padding: 8px; background: var(--bg-card); }
-            
-            td { 
-                display: flex; 
-                justify-content: flex-end; 
-                align-items: center; 
-                text-align: right; 
-                padding: 12px 15px 12px 45%; /* Оставя място за етикета отляво */
-                border-bottom: 1px solid rgba(255,255,255,0.05); 
-                position: relative; 
-                min-height: 48px;
-            }
+            td { display: flex; justify-content: flex-end; align-items: center; text-align: right; padding: 12px 15px 12px 45%; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; min-height: 48px; }
             td:last-child { border-bottom: none; padding: 15px; justify-content: center; }
-            
-            td::before { 
-                content: attr(data-label); 
-                position: absolute; 
-                left: 15px; 
-                width: 40%; 
-                text-align: left; 
-                color: var(--text-muted); 
-                font-size: 0.8rem; 
-                font-weight: 600; 
-                text-transform: uppercase; 
-                top: 50%; 
-                transform: translateY(-50%); 
-            }
-            
-            /* Бутонът за отмяна на цял екран */
+            td::before { content: attr(data-label); position: absolute; left: 15px; width: 40%; text-align: left; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; top: 50%; transform: translateY(-50%); }
             td:last-child::before { display: none; }
-            .action-btn { width: 100%; padding: 14px; font-size: 1rem; border-color: rgba(255, 77, 79, 0.3); color: var(--danger); background: rgba(255, 77, 79, 0.05); font-weight: 500;}
-            .action-btn:hover { background: rgba(255, 77, 79, 0.15); }
+            .action-btn { width: 100%; }
         }
     </style>
 </head>
@@ -256,6 +222,7 @@
                     <thead>
                         <tr>
                             <th>Час</th>
+                            <th>Майстор</th>
                             <th>Клиент</th>
                             <th>Телефон</th>
                             <th>Услуги</th>
@@ -264,7 +231,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        </tbody>
+                    </tbody>
                 </table>
                 
                 <div class="empty-state" id="empty-state" style="display: none;">
@@ -318,47 +285,29 @@
                     initDashboard();
                 }, 300);
             } else {
-                const errorMsg = document.getElementById('login-error');
-                errorMsg.style.display = 'block';
+                document.getElementById('login-error').style.display = 'block';
                 document.getElementById('pin-input').value = '';
-                const box = document.querySelector('.login-box');
-                box.style.transform = 'translateX(10px)';
-                setTimeout(() => box.style.transform = 'translateX(-10px)', 100);
-                setTimeout(() => box.style.transform = 'translateX(0)', 200);
             }
         };
 
         window.logout = () => {
             document.getElementById('login-screen').style.display = 'flex';
-            setTimeout(() => document.getElementById('login-screen').style.opacity = '1', 10);
             document.getElementById('dashboard-wrapper').style.display = 'none';
-            document.getElementById('pin-input').value = '';
-            document.getElementById('login-error').style.display = 'none';
         };
 
-        document.getElementById('pin-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') window.checkPin();
-        });
-
         let unsubscribe = null; 
-        const maxSlots = 9;
 
         function formatDateBG(dateString) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateObj = new Date(dateString);
-            return dateObj.toLocaleDateString('bg-BG', options).replace(/^\w/, c => c.toUpperCase());
+            return new Date(dateString).toLocaleDateString('bg-BG', options);
         }
 
         function initDashboard() {
             const dateInput = document.getElementById('admin-date');
-            
-            const today = new Date();
-            const localDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-            dateInput.value = localDate;
-            document.getElementById('display-date').innerText = formatDateBG(localDate);
-
-            loadAppointments(localDate);
-
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            document.getElementById('display-date').innerText = formatDateBG(today);
+            loadAppointments(today);
             dateInput.addEventListener('change', (e) => {
                 document.getElementById('display-date').innerText = formatDateBG(e.target.value);
                 loadAppointments(e.target.value);
@@ -366,17 +315,12 @@
         }
 
         function loadAppointments(date) {
-            console.log("Опит за зареждане на данни за дата:", date);
-            
             const tableBody = document.getElementById('table-body');
             const emptyState = document.getElementById('empty-state');
             const loader = document.getElementById('loader');
-            const totalClients = document.getElementById('total-clients');
             const tableElement = document.getElementById('appointments-table');
+            const totalClients = document.getElementById('total-clients');
             const scheduleStatus = document.getElementById('schedule-status');
-            
-            const emptyTitle = document.getElementById('empty-state-title');
-            const emptyDesc = document.getElementById('empty-state-desc');
 
             loader.style.display = 'block';
             tableElement.style.display = 'none';
@@ -390,37 +334,22 @@
                 loader.style.display = 'none';
                 tableBody.innerHTML = '';
                 
-                console.log("Данни от Firebase за " + date + ":", snapshot.val());
-
                 if (!snapshot.exists()) {
                     emptyState.style.display = 'block';
-                    tableElement.style.display = 'none';
                     totalClients.innerText = "0";
                     scheduleStatus.innerText = "Свободен";
                     scheduleStatus.style.color = "#4CAF50";
-                    
-                    emptyTitle.innerText = "Графикът е празен";
-                    emptyDesc.innerHTML = `Няма записани часове за <strong>${date}</strong>.`;
                     return;
                 }
 
-                const clientCount = snapshot.size;
-                totalClients.innerText = clientCount;
-
-                if (clientCount >= maxSlots) {
-                    scheduleStatus.innerText = "Пълно";
-                    scheduleStatus.style.color = "var(--danger)"; 
-                } else {
-                    scheduleStatus.innerText = "Активен";
-                    scheduleStatus.style.color = "var(--gold)"; 
-                }
-                
-                emptyState.style.display = 'none';
+                totalClients.innerText = snapshot.size;
+                scheduleStatus.innerText = "Активен";
+                scheduleStatus.style.color = "var(--gold)";
                 tableElement.style.display = 'table';
 
                 const appointments = [];
-                snapshot.forEach((childSnapshot) => {
-                    appointments.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                snapshot.forEach((child) => {
+                    appointments.push({ id: child.key, ...child.val() });
                 });
 
                 appointments.sort((a, b) => a.time.localeCompare(b.time));
@@ -429,13 +358,12 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td data-label="Час"><span class="time-badge">${app.time}</span></td>
+                        <td data-label="Майстор"><span class="barber-badge">${app.barber || 'Неизвестен'}</span></td>
                         <td data-label="Клиент" class="client-name"><i class="fas fa-user-circle"></i> ${app.clientName}</td>
-                        <td data-label="Телефон" class="client-phone">
-                            <a href="tel:${app.clientPhone}"><i class="fas fa-phone-alt"></i> ${app.clientPhone}</a>
-                        </td>
-                        <td data-label="Услуги" style="font-size: 0.85rem; color: var(--text-muted); max-width: 200px;">${app.services || '-'}</td>
+                        <td data-label="Телефон" class="client-phone"><a href="tel:${app.clientPhone}">${app.clientPhone}</a></td>
+                        <td data-label="Услуги" style="font-size: 0.85rem; color: var(--text-muted);">${app.services || app.totalPrice.split('(')[0] || '-'}</td>
                         <td data-label="Цена" style="font-weight: 600; color: var(--gold);">${app.totalPrice || '-'}</td>
-                        <td data-label="Управление">
+                        <td data-label="Управление" style="text-align: right;">
                             <button class="action-btn" onclick="openDeleteModal('${app.id}', '${app.time}', '${app.clientName}')">
                                 <i class="fas fa-times"></i> Отмяна
                             </button>
@@ -443,48 +371,24 @@
                     `;
                     tableBody.appendChild(tr);
                 });
-            }, (error) => {
-                console.error("Firebase Грешка:", error);
-                
-                loader.style.display = 'none';
-                emptyState.style.display = 'block';
-                
-                if (error.message.includes("Permission denied")) {
-                    emptyTitle.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-lock"></i> Достъпът е отказан!</span>';
-                    emptyDesc.innerHTML = 'Базата данни е заключена за четене. Трябва да промените <strong>Firebase Rules</strong>.';
-                } else {
-                    emptyTitle.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Грешка при връзката</span>';
-                    emptyDesc.innerText = error.message;
-                }
             });
         }
 
         let currentDeleteId = null;
-
         window.openDeleteModal = (id, time, name) => {
             currentDeleteId = id;
-            document.getElementById('modal-text').innerHTML = `Сигурни ли сте, че искате да отмените резервацията на <strong>${name}</strong> за <strong>${time} ч.</strong>?<br><br>Тази действие не може да бъде върнато и ще освободи часа за други клиенти.`;
+            document.getElementById('modal-text').innerHTML = `Отмяна на <strong>${name}</strong> за <strong>${time} ч.</strong>?`;
             document.getElementById('delete-modal').style.display = 'flex';
         };
 
         window.closeModal = () => {
             document.getElementById('delete-modal').style.display = 'none';
-            currentDeleteId = null;
         };
 
         document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
             if (currentDeleteId) {
-                const btn = document.getElementById('confirm-delete-btn');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Изтриване...';
-                try {
-                    await remove(ref(db, `appointments/${currentDeleteId}`));
-                    closeModal();
-                } catch (error) {
-                    alert("Възникна грешка при изтриването.");
-                    console.error("Error: ", error);
-                } finally {
-                    btn.innerHTML = 'Да, отмени часа';
-                }
+                await remove(ref(db, `appointments/${currentDeleteId}`));
+                closeModal();
             }
         });
     </script>
